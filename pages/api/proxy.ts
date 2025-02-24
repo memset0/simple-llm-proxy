@@ -54,31 +54,31 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   ]);
 
   return new Response(JSON.stringify({ headers, searchParams }), { status: 200 });
-  let url: URL | null = null;
-  if (pathname.startsWith('/google')) {
-    url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
-    searchParams.delete('_path');
-  } else {
-    return new Response('Not Found', { status: 404 });
-  }
+  // let url: URL | null = null;
+  // if (pathname.startsWith('/google')) {
+  //   url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
+  //   searchParams.delete('_path');
+  // } else {
+  //   return new Response('Not Found', { status: 404 });
+  // }
 
-  searchParams.forEach((value, key) => {
-    url.searchParams.append(key, value);
-  });
+  // searchParams.forEach((value, key) => {
+  //   url.searchParams.append(key, value);
+  // });
 
-  const response = await fetch(url, {
-    body: request.body,
-    method: request.method,
-    headers,
-  });
+  // const response = await fetch(url, {
+  //   body: request.body,
+  //   method: request.method,
+  //   headers,
+  // });
 
-  const responseHeaders = {
-    ...CORS_HEADERS,
-    ...Object.fromEntries(response.headers),
-  };
+  // const responseHeaders = {
+  //   ...CORS_HEADERS,
+  //   ...Object.fromEntries(response.headers),
+  // };
 
-  return new Response(response.body, {
-    headers: responseHeaders,
-    status: response.status,
-  });
+  // return new Response(response.body, {
+  //   headers: responseHeaders,
+  //   status: response.status,
+  // });
 }
