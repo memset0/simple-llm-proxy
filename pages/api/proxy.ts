@@ -50,7 +50,11 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   ]);
 
   let url: URL | null = null;
-  if (pathname.startsWith('/google/')) {
+  if (pathname.startsWith('/openai/')) {
+    // OpenAI
+    url = new URL(pathname.slice(7), 'https://api.openai.com');
+    searchParams.delete('_path');
+  } else if (pathname.startsWith('/google/')) {
     // Google Gemini
     url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
     searchParams.delete('_path');
