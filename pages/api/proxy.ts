@@ -39,7 +39,21 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   }
 
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
+  const headers = filterHeaders(request.headers, [
+    'content-length', // 禁用 content-length 头
+    'dnt',
+    'referer',
+    'sec-ch-ua',
+    'sec-ch-ua-mobile',
+    'sec-ch-ua-platform',
+    'sec-fetch-dest',
+    'sec-fetch-mode',
+    'sec-fetch-site',
+    'sec-fetch-user',
+    'upgrade-insecure-requests',
+  ]);
 
+  return new Response(JSON.stringify({ headers, searchParams }), { status: 200 });
   let url: URL | null = null;
   if (pathname.startsWith('/google')) {
     url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
@@ -51,8 +65,6 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   searchParams.forEach((value, key) => {
     url.searchParams.append(key, value);
   });
-
-  const headers = filterHeaders(request.headers, ['content-length', 'dnt', 'referer', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'sec-fetch-dest', 'sec-fetch-mode', 'sec-fetch-site', 'sec-fetch-user', 'upgrade-insecure-requests', 'user-agent']);
 
   const response = await fetch(url, {
     body: request.body,
