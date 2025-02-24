@@ -53,7 +53,14 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     'upgrade-insecure-requests',
   ]);
 
-  return new Response(JSON.stringify({ headers, searchParams }), { status: 200 });
+  return new Response(
+    JSON.stringify({
+      headers: Object.fromEntries(headers.entries()), // 返回 headers
+      searchParams: Object.fromEntries(searchParams.entries()), // 返回 searchParams
+    }),
+    { status: 200 }
+  );
+  
   // let url: URL | null = null;
   // if (pathname.startsWith('/google')) {
   //   url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
