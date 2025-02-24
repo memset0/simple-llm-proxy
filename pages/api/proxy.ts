@@ -6,8 +6,6 @@ export const config = {
     bodyParser: false, // 禁用内置的 body 解析
     responseLimit: false, // 取消响应大小限制
   },
-  // Available languages and regions for Google AI Studio and Gemini API
-  // https://ai.google.dev/available_regions
   // https://vercel.com/docs/concepts/edge-network/regions
   regions: ['cle1', 'iad1', 'pdx1', 'sfo1', 'sin1', 'syd1', 'hnd1', 'kix1'],
 };

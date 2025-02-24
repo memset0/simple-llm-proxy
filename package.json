@@ -1,8 +1,8 @@
 {
-  "name": "simple-llm-proxy",
-  "version": "1.0.0",
+  "name": "simple-llm-router",
+  "version": "2.0.0",
   "author": "memset0",
-  "description": "Simple proxy for various LLM providers",
+  "description": "Simple router for various LLM providers",
   "main": "api/proxy.js",
   "scripts": {
     "next": "next",
@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@edge-runtime/primitives": "^6.0.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/joy": "^5.0.0-beta.51",
     "cross-env": "^7.0.3",
     "next": "canary",
     "react": "latest",
     "react-dom": "latest",
-    "simple-llm-proxy": "file:"
+    "simple-llm-router": "file:"
   },
   "devDependencies": {
     "@types/node": "latest",
