@@ -1,4 +1,4 @@
-## Simple LLM Router
+# Simple LLM Router
 
 > [_English_](./README.md) | [_简体中文_](./README.zh_CN.md)
 
