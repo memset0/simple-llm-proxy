@@ -40,16 +40,12 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
 
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
   const headers = filterHeaders(request.headers, [
-    'content-length', // 禁用 content-length 头
+    /^x\-vercel\-+$/, // vercel 相关头
+    /^x\-forward\-+$/, // vercel 相关头
+    /^sec\-+$/,
+    'content-length',
     'dnt',
     'referer',
-    'sec-ch-ua',
-    'sec-ch-ua-mobile',
-    'sec-ch-ua-platform',
-    'sec-fetch-dest',
-    'sec-fetch-mode',
-    'sec-fetch-site',
-    'sec-fetch-user',
     'upgrade-insecure-requests',
   ]);
 
@@ -60,7 +56,7 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     }),
     { status: 200 }
   );
-  
+
   // let url: URL | null = null;
   // if (pathname.startsWith('/google')) {
   //   url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
