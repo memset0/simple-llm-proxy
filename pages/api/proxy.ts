@@ -54,6 +54,10 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     // OpenAI
     url = new URL(pathname.slice(7), 'https://api.openai.com');
     searchParams.delete('_path');
+  } else if (pathname.startsWith('/anthropic/')) {
+    // Anthropic
+    url = new URL(pathname.slice(10), 'https://api.anthropic.com');
+    searchParams.delete('_path');
   } else if (pathname.startsWith('/google/')) {
     // Google Gemini
     url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
