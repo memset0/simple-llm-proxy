@@ -16,9 +16,9 @@ export default async function handler(req, res) {
     // Create a new Headers object and copy headers, excluding 'content-length'
     const headers = new Headers();
     for (const [key, value] of Object.entries(req.headers)) {
-        if (key.toLowerCase() !== 'content-length') {
-            headers.append(key, value);
-        }
+      if (key.toLowerCase() !== 'content-length') {
+        headers.append(key, value);
+      }
     }
 
     const response = await fetch(targetUrl, {
@@ -46,12 +46,9 @@ export default async function handler(req, res) {
       };
       processStream();
     } else {
-      // 如果不是流式响应，则回退到之前的处理方式
-      const data = await response.json();
-      res.status(response.status).json(data);
+      // If not a stream, pipe the response directly
+      response.body.pipe(res);
     }
-
-    
   } catch (error) {
     console.error('Fetch Error:', error); // 将错误记录到控制台
 
