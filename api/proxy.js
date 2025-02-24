@@ -1,4 +1,7 @@
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
   try {
     let targetUrl;
     let pathname;
@@ -27,26 +30,40 @@ export default async function handler(req, res) {
       body: req.method !== 'GET' ? req.body : undefined, // Pass the raw request body directly
     });
 
-    if (response.body && response.body.getReader) {
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
+    // 复制相应的所有请求头
+    for (const [key, value] of response.headers) {
+      res.setHeader(key, value);
+    }
 
+    const contentType = response.headers.get('content-type') || '';
+    if (
+      contentType.includes('stream') || //
+      response.headers.get('transfer-encoding') === 'chunked' || //
+      contentType.includes('event-stream')
+    ) {
+      // 流式请求
       const reader = response.body.getReader();
 
-      const processStream = async () => {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
-            res.end();
-            break;
+      const stream = new ReadableStream({
+        async start(controller) {
+          try {
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              controller.enqueue(value);
+            }
+          } catch (error) {
+            controller.error(error);
+          } finally {
+            controller.close();
+            reader.releaseLock();
           }
-          res.write(value);
-        }
-      };
-      processStream();
+        },
+      });
+
+      await stream.pipeTo(res);
     } else {
-      // If not a stream, pipe the response directly
+      // 非流式请求
       response.body.pipe(res);
     }
   } catch (error) {
@@ -66,3 +83,10 @@ export default async function handler(req, res) {
     res.status(500).json(errorDetails);
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false, // 禁用内置的 body 解析
+    responseLimit: false, // 取消响应大小限制
+  },
+};
