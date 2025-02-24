@@ -64,7 +64,7 @@ export default function Home() {
           <thead>
             <tr>
               <th style={{ width: '15%' }}>Provider</th>
-              <th >Route Url</th>
+              <th>Route Endpoint</th>
               <th style={{ width: '45%' }}>Original Host</th>
             </tr>
           </thead>
@@ -73,7 +73,7 @@ export default function Home() {
               <tr key={provider}>
                 <td>{provider}</td>
                 <td>{currentHost + '/' + provider}</td>
-                <td>{'https://' + host}</td>
+                <td>{host}</td>
               </tr>
             ))}
           </tbody>
