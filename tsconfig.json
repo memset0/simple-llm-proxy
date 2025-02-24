@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "lib": [
+      "es2021",
+      "dom",
+      "dom.iterable"
+    ],
+    "jsx": "preserve",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "types": ["@edge-runtime/primitives"]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
