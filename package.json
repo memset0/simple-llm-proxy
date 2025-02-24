@@ -7,10 +7,11 @@
   "scripts": {
     "next": "next",
     "build": "next build",
-    "dev": "PORT=4000 next dev"
+    "dev": "cross-env PORT=4000 next dev"
   },
   "dependencies": {
     "@edge-runtime/primitives": "^6.0.0",
+    "cross-env": "^7.0.3",
     "next": "canary",
     "react": "latest",
     "react-dom": "latest",

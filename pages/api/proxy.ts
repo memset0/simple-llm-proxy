@@ -41,7 +41,7 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
 
   let url: URL | null = null;
-  if (pathname.startsWith('/google/')) {
+  if (pathname.startsWith('/google')) {
     url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
     searchParams.delete('_path');
   } else {
