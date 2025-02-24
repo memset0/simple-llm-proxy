@@ -10,13 +10,17 @@ export const defaultProviders: { [Key: string]: string } = {
   openrouter: 'openrouter.ai/api',
 };
 
-// const getBaseUrl = (provider: Provider): string => {
-//   const envVar = process.env[`API_BASE_URL_${provider.provider.toUpperCase()}`];
-//   return envVar || `https://${provider.host}`;
-// };
-
 const providers = (() => {
-  return defaultProviders;
+  const providers = defaultProviders;
+  for (const key in process.env) {
+    if (key.startsWith('API_BASE_URL_')) {
+      const provider = key.slice(13).toLowerCase();
+      if (process.env[key]) {
+        providers[provider] = process.env[key];
+      }
+    }
+  }
+  return providers;
 })();
 
 export default providers;
