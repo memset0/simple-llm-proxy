@@ -54,7 +54,10 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
       headers: Object.fromEntries(headers.entries()), // 返回 headers
       searchParams: Object.fromEntries(searchParams.entries()), // 返回 searchParams
     }),
-    { status: 200 }
+    {
+      headers: CORS_HEADERS,
+      status: 200
+    }
   );
 
   // let url: URL | null = null;
