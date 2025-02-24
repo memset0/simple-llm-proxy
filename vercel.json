@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/openai/(.*)",
+      "dest": "/api/proxy.js"
+    },
+    {
+      "src": "/google/(.*)", 
+      "dest": "/api/proxy.js"
+    }
+  ]
+}

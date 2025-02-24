@@ -1,0 +1,17 @@
+{
+  "name": "simple-llm-proxy",
+  "version": "1.0.0",
+	"author": "memset0",
+  "description": "Simple proxy for various LLM providers",
+  "main": "api/proxy.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel deploy"
+  },
+  "dependencies": {
+    "@vercel/node": "^3.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
