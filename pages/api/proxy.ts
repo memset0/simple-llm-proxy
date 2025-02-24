@@ -41,8 +41,8 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
   const headers = filterHeaders(request.headers, [
     /^x\-vercel\-.+$/, // vercel 相关头
-    /^x\-forward\-.+$/, // vercel 相关头
-    /^sec\-.+$/,
+    /^x\-forwarded\-.+$/, // 转发相关头
+    /^sec\-.+$/, // 安全相关头
     'content-length',
     'dnt',
     'referer',
