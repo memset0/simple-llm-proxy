@@ -9,6 +9,8 @@ import ListItem from '@mui/joy/ListItem';
 import Link from '@mui/joy/Link';
 import { useState, useEffect } from 'react';
 
+import providers from '@/lib/providers';
+
 const examples = [
   {
     name: 'OpenAI',
@@ -24,21 +26,6 @@ const examples = [
     name: 'Google Gemini',
     from: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent',
     to: '/google/v1beta/models/gemini-1.5-pro:generateContent',
-  },
-];
-
-const providers = [
-  {
-    provider: 'openai',
-    host: 'api.openai.com',
-  },
-  {
-    provider: 'anthropic',
-    host: 'api.anthropic.com',
-  },
-  {
-    provider: 'google',
-    host: 'generativelanguage.googleapis.com',
   },
 ];
 
@@ -76,17 +63,17 @@ export default function Home() {
         <Table aria-label="basic table" sx={{ mt: 2, '& td': { wordBreak: 'break-word' } }}>
           <thead>
             <tr>
-              <th style={{ width: '20%' }}>Provider</th>
-              <th>Route Url</th>
-              <th>Original Host</th>
+              <th style={{ width: '15%' }}>Provider</th>
+              <th >Route Url</th>
+              <th style={{ width: '45%' }}>Original Host</th>
             </tr>
           </thead>
           <tbody>
-            {providers.map((provider) => (
-              <tr key={provider.provider}>
-                <td>{provider.provider}</td>
-                <td>{currentHost + '/' + provider.provider}</td>
-                <td>{'https://' + provider.host}</td>
+            {Object.entries(providers).map(([provider, host]) => (
+              <tr key={provider}>
+                <td>{provider}</td>
+                <td>{currentHost + '/' + provider}</td>
+                <td>{'https://' + host}</td>
               </tr>
             ))}
           </tbody>

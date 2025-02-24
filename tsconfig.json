@@ -20,7 +20,10 @@
     "skipLibCheck": true,
     "incremental": true,
     "esModuleInterop": true,
-    "types": ["@edge-runtime/primitives"]
+    "types": ["@edge-runtime/primitives"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "next-env.d.ts",

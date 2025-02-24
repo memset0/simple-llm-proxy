@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import providers from '@/lib/providers';
 
 export const config = {
   runtime: 'edge',
@@ -47,20 +48,7 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     'upgrade-insecure-requests',
   ]);
 
-  let url: URL | null = null;
-  if (pathname.startsWith('/openai/')) {
-    // OpenAI
-    url = new URL(pathname.slice(7), 'https://api.openai.com');
-    searchParams.delete('_path');
-  } else if (pathname.startsWith('/anthropic/')) {
-    // Anthropic
-    url = new URL(pathname.slice(10), 'https://api.anthropic.com');
-    searchParams.delete('_path');
-  } else if (pathname.startsWith('/google/')) {
-    // Google Gemini
-    url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
-    searchParams.delete('_path');
-  } else if (pathname.startsWith('/debug/')) {
+  if (pathname.startsWith('/debug/')) {
     // just for debuugging...
     return new Response(
       JSON.stringify({
@@ -72,7 +60,17 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
         status: 200,
       }
     );
-  } else {
+  }
+
+  let url: URL | null = null;
+  for (const provider in providers) {
+    if (pathname.startsWith(`/${provider}/`)) {
+      url = new URL(pathname.slice(provider.length + 1), providers[provider]);
+      searchParams.delete('_path');
+      break;
+    }
+  }
+  if (url === null) {
     return new Response('Not Found', { status: 404 });
   }
 

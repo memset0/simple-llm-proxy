@@ -1,6 +1,6 @@
 {
   "name": "simple-llm-router",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "memset0",
   "description": "Simple router for various LLM providers",
   "main": "api/proxy.js",
