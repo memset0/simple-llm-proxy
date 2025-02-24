@@ -43,6 +43,19 @@ export default async function handler(req, res) {
       res.status(response.status).json(data);
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Fetch Error:', error); // 将错误记录到控制台
+
+    let errorDetails = {
+      message: 'fetch failed',
+      error: error.message,
+    };
+
+    if (error.cause) {
+      errorDetails.cause = error.cause;
+    }
+    if (error.stack) {
+      errorDetails.stack = error.stack;
+    }
+    res.status(500).json(errorDetails);
   }
 }
