@@ -39,11 +39,37 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   }
 
   const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
+  const headers = filterHeaders(request.headers, [
+    /^x\-vercel\-.+$/, // vercel 相关头
+    /^x\-forwarded\-.+$/, // 转发相关头
+    /^sec\-.+$/, // 安全相关头
+    'content-length',
+    'dnt',
+    'referer',
+    'upgrade-insecure-requests',
+  ]);
 
   let url: URL | null = null;
-  if (pathname.startsWith('/google')) {
+  if (pathname.startsWith('/openai/')) {
+    // OpenAI
+    url = new URL(pathname.slice(7), 'https://api.openai.com');
+    searchParams.delete('_path');
+  } else if (pathname.startsWith('/google/')) {
+    // Google Gemini
     url = new URL(pathname.slice(7), 'https://generativelanguage.googleapis.com');
     searchParams.delete('_path');
+  } else if (pathname.startsWith('/debug/')) {
+    // just for debuugging...
+    return new Response(
+      JSON.stringify({
+        headers: Object.fromEntries(headers.entries()), //
+        searchParams: Object.fromEntries(searchParams.entries()),
+      }),
+      {
+        headers: CORS_HEADERS,
+        status: 200,
+      }
+    );
   } else {
     return new Response('Not Found', { status: 404 });
   }
@@ -51,8 +77,6 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   searchParams.forEach((value, key) => {
     url.searchParams.append(key, value);
   });
-
-  const headers = filterHeaders(request.headers, ['content-length', 'dnt', 'referer', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'sec-fetch-dest', 'sec-fetch-mode', 'sec-fetch-site', 'sec-fetch-user', 'upgrade-insecure-requests', 'user-agent']);
 
   const response = await fetch(url, {
     body: request.body,
