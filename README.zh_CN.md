@@ -1,5 +1,7 @@
 ## Simple LLM Proxy
 
+> [_English_](./README.md) | [_简体中文_](./README.zh_CN.md)
+
 一个简单的 LLM 代理，由 Next.js 驱动。
 
 支持常见的 LLM 提供商，你只需要更改 API 请求的根地址：

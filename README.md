@@ -1,5 +1,7 @@
 # Simple LLM Proxy
 
+> [_English_](./README.md) | [_简体中文_](./README.zh_CN.md)
+
 A simple LLM proxy powered by Next.js.
 
 Supports common LLM providers by simply changing the API request root URL:
