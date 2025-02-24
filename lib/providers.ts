@@ -20,6 +20,18 @@ const providers = (() => {
       }
     }
   }
+  for (const provider in providers) {
+    if (providers[provider].startsWith('http://')) {
+      providers[provider] = providers[provider].slice(7);
+    }
+    if (providers[provider].startsWith('https://')) {
+      providers[provider] = providers[provider].slice(8);
+    }
+    if (providers[provider].endsWith('/')) {
+      providers[provider] = providers[provider].slice(0, -1);
+    }
+    providers[provider] = 'https://' + providers[provider];
+  }
   return providers;
 })();
 

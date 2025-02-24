@@ -65,7 +65,8 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   let url: URL | null = null;
   for (const provider in providers) {
     if (pathname.startsWith(`/${provider}/`)) {
-      url = new URL(pathname.slice(provider.length + 1), providers[provider]);
+      console.log(providers[provider] + pathname.slice(provider.length + 1));
+      url = new URL(providers[provider] + pathname.slice(provider.length + 1));
       searchParams.delete('_path');
       break;
     }
