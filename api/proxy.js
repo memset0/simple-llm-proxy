@@ -64,7 +64,8 @@ export default async function handler(req, res) {
       await stream.pipeTo(res);
     } else {
       // 非流式请求
-      response.body.pipe(res);
+      const data = await response.text();
+      res.send(data);
     }
   } catch (error) {
     console.error('Fetch Error:', error); // 将错误记录到控制台

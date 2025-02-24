@@ -7,7 +7,7 @@
     },
     {
       "src": "/google/(.*)", 
-      "dest": "/api/proxy.js"
+      "dest": "https://generativelanguage.googleapis.com/$1"
     }
   ]
 }
