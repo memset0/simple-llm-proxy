@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import envConfig from '@/lib/config';
 import providers from '@/lib/providers';
 
-export const config = {
+const config = {
   runtime: 'edge',
   api: {
     bodyParser: false, // 禁用内置的 body 解析
