@@ -88,3 +88,4 @@ export function getDisplayedProviders() {
 }
 
 const providers = getProviders();
+export default providers;
