@@ -24,6 +24,8 @@
 
 设置并提供自己的 API 根地址，其中 `xxx` 为提供商名称，环境变量的值为提供商的 API 根地址，支持设置多个。
 
+> 特别地，如果提供商名称以 `nextchat` 开头，则会启用适配 NextChat 的特殊功能：把通过不同方法附带在 Header 中的 API Key 自动放到 `Authorization` 字段中。
+
 #### `SLR_HIDE_PROVIDERS`
 
 设置在登陆页中隐藏的提供商列表，多个需要隐藏的提供商之间使用 `,` 分隔，默认关闭。
@@ -33,9 +35,3 @@
 是否启用轮询，设置为 `true` 时开启，默认关闭。
 
 仅对 OpenAPI、Google、Anthropic 生效，多个 API Key 之间使用 `,` 分隔。
-
-#### `SLR_COMPATIBILITY_MODE`
-
-是否启用兼容模式，设置为 `true` 时启用，默认关闭。
-
-仅对 OpenAPI、Google、Anthropic 生效，当 API Key 以不正确的形式传递时（比如请求 Anthropic 模型时以 `Authorization` 的方式传递），启用兼容模式后会自动填写到正确的位置上。

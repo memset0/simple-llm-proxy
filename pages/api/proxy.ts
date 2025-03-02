@@ -110,12 +110,17 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     );
   }
 
+  let isNextChat = false;
+
   let url: URL | null = null;
   for (const provider in providers) {
     if (pathname.startsWith(`/${provider}/`)) {
       console.log(providers[provider] + pathname.slice(provider.length + 1));
       url = new URL(providers[provider] + pathname.slice(provider.length + 1));
       searchParams.delete('_path');
+      if (provider.startsWith('nextchat')) {
+        isNextChat = true;
+      }
       break;
     }
   }
@@ -133,10 +138,10 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     }
   }
 
-  if (envConfig.compatibilityMode) {
+  if (isNextChat) {
     const apiKey = getApiKey(headers);
     if (apiKey !== null) {
-      setApiKey(apiKey, headers);
+      setApiKey(apiKey, headers, 'openai');
     }
   }
 

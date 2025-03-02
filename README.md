@@ -24,6 +24,8 @@ Supports deployment on Vercel (**USE IT AT YOUR OWN RISK**).
 
 Set and provide your own API base URL, where `xxx` is the provider name. The value of the environment variable is the provider's API base URL. Multiple providers can be configured.
 
+> Specifically, if the provider name starts with `nextchat`, special features adapted for NextChat will be enabled: API Keys attached in the Header through different methods will be automatically placed in the `Authorization` field.
+
 #### `SLR_HIDE_PROVIDERS`
 
 Set a list of providers to hide on the login page. Multiple providers should be separated by `,`. Disabled by default.
@@ -33,9 +35,3 @@ Set a list of providers to hide on the login page. Multiple providers should be 
 Whether to enable polling. Set to `true` to enable, disabled by default.
 
 Only effective for OpenAPI, Google, and Anthropic. Multiple API keys should be separated by `,`.
-
-#### `SLR_COMPATIBILITY_MODE`
-
-Whether to enable compatibility mode. Set to `true` to enable, disabled by default.
-
-Only effective for OpenAPI, Google, and Anthropic. When API keys are passed in an incorrect format (such as passing via `Authorization` when requesting Anthropic models), enabling compatibility mode will automatically fill in the correct location.
