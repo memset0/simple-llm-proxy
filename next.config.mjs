@@ -3,8 +3,9 @@ const config = {
   async rewrites() {
     return [
       {
-        source: "/:_path*",
-        destination: "/api/proxy"
+        source: '/:_path*',
+        // source: '/:path((?!_next/).*)',
+        destination: '/api/proxy',
       },
     ];
   },

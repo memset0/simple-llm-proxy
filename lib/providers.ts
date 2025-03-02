@@ -10,42 +10,81 @@ export const defaultProviders: { [Key: string]: string } = {
   openrouter: 'openrouter.ai/api',
 };
 
-function getProviders() {
-  for (const key in process.env) {
-    if (key.startsWith('SLR_')) {
-      console.log(key, process.env[key]);
-    }
+// 缓存 providers 结果以避免重复计算
+let cachedProviders: { [Key: string]: string } | null = null;
+
+export function getProviders() {
+  // 如果已经计算过，直接返回缓存结果
+  if (cachedProviders) {
+    return cachedProviders;
   }
-  const providers = defaultProviders;
-  for (const key in process.env) {
-    if (key.startsWith('SLR_API_BASE_URL_')) {
-      const provider = key.slice(13).toLowerCase();
-      if (process.env[key]) {
-        providers[provider] = process.env[key];
+
+  // 打印环境变量 (server side)
+  if (typeof process !== 'undefined' && process.env) {
+    for (const key in process.env) {
+      if (key.startsWith('SLR_')) {
+        console.log(key, process.env[key]);
       }
     }
   }
-  for (const provider in providers) {
-    if (providers[provider].startsWith('http://')) {
-      providers[provider] = providers[provider].slice(7);
+
+  // 复制默认 providers 以避免修改原始对象
+  const providers = { ...defaultProviders };
+
+  // 从环境变量添加自定义 providers (server side)
+  if (typeof process !== 'undefined' && process.env) {
+    for (const key in process.env) {
+      if (key.startsWith('SLR_API_BASE_URL_')) {
+        const provider = key.slice(17).toLowerCase();
+        if (process.env[key]) {
+          providers[provider] = process.env[key];
+        }
+      }
     }
-    if (providers[provider].startsWith('https://')) {
-      providers[provider] = providers[provider].slice(8);
-    }
-    if (providers[provider].endsWith('/')) {
-      providers[provider] = providers[provider].slice(0, -1);
-    }
-    providers[provider] = 'https://' + providers[provider];
   }
+
+  // 处理 URL 格式
+  for (const provider in providers) {
+    let url = providers[provider];
+    if (url.startsWith('http://')) {
+      url = url.slice(7);
+    }
+    if (url.startsWith('https://')) {
+      url = url.slice(8);
+    }
+    if (url.endsWith('/')) {
+      url = url.slice(0, -1);
+    }
+    providers[provider] = 'https://' + url;
+  }
+
+  console.log('providers:', providers);
+
+  // 缓存结果
+  cachedProviders = providers;
   return providers;
 }
 
-const providers = getProviders();
+let cachedDisplayedProviders: { [Key: string]: string } | null = null;
 
-export default providers;
+export function getDisplayedProviders() {
+  if (cachedDisplayedProviders) {
+    return cachedDisplayedProviders;
+  }
 
-export const displayedProviders = () => {
   const providers = getProviders();
-  const hideProviders = process.env.SLR_HIDE_PROVIDERS?.split(',') || [];
-  return Object.keys(providers).filter((provider) => !hideProviders.includes(provider));
-};
+  const hideProviders = typeof process !== 'undefined' && process.env.SLR_HIDE_PROVIDERS ? process.env.SLR_HIDE_PROVIDERS.split(',') : [];
+
+  const displayedProviders: { [Key: string]: string } = {};
+  for (const provider in providers) {
+    if (!hideProviders.includes(provider)) {
+      displayedProviders[provider] = providers[provider];
+    }
+  }
+  console.log('displayedProviders:', displayedProviders);
+
+  cachedDisplayedProviders = displayedProviders;
+  return displayedProviders;
+}
+
+const providers = getProviders();

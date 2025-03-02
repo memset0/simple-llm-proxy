@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import envConfig from '@/lib/config';
 import providers from '@/lib/providers';
 
-const config = {
+export const config = {
   runtime: 'edge',
   api: {
     bodyParser: false, // 禁用内置的 body 解析
@@ -10,7 +10,6 @@ const config = {
   },
   // https://vercel.com/docs/concepts/edge-network/regions
   regions: ['cle1', 'iad1', 'pdx1', 'sfo1', 'sin1', 'syd1', 'hnd1', 'kix1'],
-  ...envConfig,
 };
 
 const CORS_HEADERS: Record<string, string> = {
@@ -75,7 +74,18 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     });
   }
 
-  const { pathname, searchParams } = request.nextUrl ? request.nextUrl : new URL(request.url);
+  if (!request.nextUrl) {
+    try {
+      new URL(request.url);
+    } catch (error) {
+      return new Response('Bad Request', {
+        headers: CORS_HEADERS,
+        status: 400,
+      });
+    }
+  }
+  const { pathname, searchParams } = request.nextUrl || new URL(request.url);
+
   const headers = filterHeaders(request.headers, [
     /^x\-vercel\-.+$/, // vercel 相关头
     /^x\-forwarded\-.+$/, // 转发相关头
@@ -113,7 +123,7 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     return new Response('Not Found', { status: 404 });
   }
 
-  if (config.polling) {
+  if (envConfig.polling) {
     for (const provider of ['openai', 'anthropic', 'google']) {
       const apiKey = getApiKey(headers, provider);
       if (apiKey !== null && apiKey.includes(',')) {
@@ -123,7 +133,7 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     }
   }
 
-  if (config.compatibilityMode) {
+  if (envConfig.compatibilityMode) {
     const apiKey = getApiKey(headers);
     if (apiKey !== null) {
       setApiKey(apiKey, headers);

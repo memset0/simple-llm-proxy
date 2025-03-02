@@ -9,8 +9,6 @@ import ListItem from '@mui/joy/ListItem';
 import Link from '@mui/joy/Link';
 import { useState, useEffect } from 'react';
 
-import { displayedProviders as providers } from '@/lib/providers';
-
 const examples = [
   {
     name: 'OpenAI',
@@ -31,10 +29,28 @@ const examples = [
 
 export default function Home() {
   const [currentHost, setCurrentHost] = useState('<host>');
+  const [displayedProviders, setDisplayedProviders] = useState<{ [Key: string]: string }>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setCurrentHost(window.location.protocol + '//' + window.location.host);
-  }, []);
+
+    const fetchProviders = async () => {
+      try {
+        const response = await fetch('/api/providers');
+        if (response.ok) {
+          const data = await response.json();
+          setDisplayedProviders(data.providers);
+        }
+      } catch (error) {
+        console.error('Failed to fetch providers:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProviders();
+  }, [currentHost]);
 
   return (
     <CssVarsProvider>
@@ -69,7 +85,7 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {Object.entries(providers).map(([provider, host]) => (
+            {Object.entries(displayedProviders).map(([provider, host]) => (
               <tr key={provider}>
                 <td>{provider}</td>
                 <td>{currentHost + '/' + provider}</td>
