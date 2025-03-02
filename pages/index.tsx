@@ -9,7 +9,7 @@ import ListItem from '@mui/joy/ListItem';
 import Link from '@mui/joy/Link';
 import { useState, useEffect } from 'react';
 
-import providers from '@/lib/providers';
+import { displayedProviders as providers } from '@/lib/providers';
 
 const examples = [
   {

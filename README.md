@@ -23,3 +23,7 @@ Supports deployment on Vercel (**USE IT AT YOUR OWN RISK**).
 #### `SLR_API_BASE_URL_xxx`
 
 Set and provide your own API base URL, where `xxx` is the provider name. The value of the environment variable is the provider's API base URL. Multiple providers can be configured.
+
+#### `SLR_HIDE_PROVIDERS`
+
+Set a list of providers to hide on the login page. Multiple providers should be separated by `,`. Disabled by default.

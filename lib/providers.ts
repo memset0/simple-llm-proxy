@@ -10,7 +10,7 @@ export const defaultProviders: { [Key: string]: string } = {
   openrouter: 'openrouter.ai/api',
 };
 
-const providers = (() => {
+function getProviders() {
   for (const key in process.env) {
     if (key.startsWith('SLR_')) {
       console.log(key, process.env[key]);
@@ -38,6 +38,14 @@ const providers = (() => {
     providers[provider] = 'https://' + providers[provider];
   }
   return providers;
-})();
+}
+
+const providers = getProviders();
 
 export default providers;
+
+export const displayedProviders = () => {
+  const providers = getProviders();
+  const hideProviders = process.env.SLR_HIDE_PROVIDERS?.split(',') || [];
+  return Object.keys(providers).filter((provider) => !hideProviders.includes(provider));
+};
