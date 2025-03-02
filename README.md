@@ -27,3 +27,10 @@ Set and provide your own API base URL, where `xxx` is the provider name. The val
 #### `SLR_HIDE_PROVIDERS`
 
 Set a list of providers to hide on the login page. Multiple providers should be separated by `,`. Disabled by default.
+
+#### `SLR_POLLING`
+
+Whether to enable polling. Set to `true` to enable, disabled by default.
+
+Only effective for OpenAPI, Google, and Anthropic. Multiple API keys should be separated by `,`.
+

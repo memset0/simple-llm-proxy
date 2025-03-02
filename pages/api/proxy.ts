@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import envConfig from '@/lib/config';
 import providers from '@/lib/providers';
 
 export const config = {
@@ -9,6 +10,7 @@ export const config = {
   },
   // https://vercel.com/docs/concepts/edge-network/regions
   regions: ['cle1', 'iad1', 'pdx1', 'sfo1', 'sin1', 'syd1', 'hnd1', 'kix1'],
+  ...envConfig,
 };
 
 const CORS_HEADERS: Record<string, string> = {
@@ -29,6 +31,42 @@ const filterHeaders = (headers: Headers, ignoreKeys: (string | RegExp)[]): Heade
   }
   return picked;
 };
+
+export function getApiKey(headers: Headers, provider: string = 'all'): string | null {
+  if (provider === 'all' || provider === 'openai') {
+    const apiKey = headers.get('Authorization');
+    if (apiKey) {
+      if (apiKey.split(' ').length === 2 && apiKey.split(' ')[0].toLowerCase() === 'bearer') {
+        return apiKey.split(' ')[1];
+      }
+    }
+  }
+  if (provider === 'all' || provider === 'anthropic') {
+    const apiKey = headers.get('x-api-key');
+    if (apiKey) {
+      return apiKey;
+    }
+  }
+  if (provider === 'all' || provider === 'google') {
+    const apiKey = headers.get('x-goog-api-key');
+    if (apiKey) {
+      return apiKey;
+    }
+  }
+  return null;
+}
+
+export function setApiKey(apiKey: string, headers: Headers, provider: string = 'all'): void {
+  if (provider === 'all' || provider === 'openai') {
+    headers.set('Authorization', `Bearer ${apiKey}`);
+  }
+  if (provider === 'all' || provider === 'anthropic') {
+    headers.set('x-api-key', apiKey);
+  }
+  if (provider === 'all' || provider === 'google') {
+    headers.set('x-goog-api-key', apiKey);
+  }
+}
 
 export default async function (request: NextRequest & { nextUrl?: URL }) {
   if (request.method === 'OPTIONS') {
@@ -75,6 +113,15 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
     return new Response('Not Found', { status: 404 });
   }
 
+  if (config.polling) {
+    for (const provider of ['openai', 'anthropic', 'google']) {
+      const apiKey = getApiKey(headers, provider);
+      if (apiKey !== null && apiKey.includes(',')) {
+        const apiKeys = apiKey.split(',');
+        setApiKey(apiKeys[Math.floor(Math.random() * apiKeys.length)], headers, provider);
+      }
+    }
+  }
   searchParams.forEach((value, key) => {
     url.searchParams.append(key, value);
   });
