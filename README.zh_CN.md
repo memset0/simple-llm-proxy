@@ -17,3 +17,9 @@
 ### Usage
 
 支持使用 Vercel 部署（**USE IT AT YOUR OWN RISK**）。
+
+### Environment Variables
+
+#### `SLR_API_BASE_URL_xxx`
+
+设置并提供自己的 API 根地址，其中 `xxx` 为提供商名称，环境变量的值为提供商的 API 根地址，支持设置多个。

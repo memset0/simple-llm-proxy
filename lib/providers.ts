@@ -11,9 +11,14 @@ export const defaultProviders: { [Key: string]: string } = {
 };
 
 const providers = (() => {
+  for (const key in process.env) {
+    if (key.startsWith('SLR_')) {
+      console.log(key, process.env[key]);
+    }
+  }
   const providers = defaultProviders;
   for (const key in process.env) {
-    if (key.startsWith('API_BASE_URL_')) {
+    if (key.startsWith('SLR_API_BASE_URL_')) {
       const provider = key.slice(13).toLowerCase();
       if (process.env[key]) {
         providers[provider] = process.env[key];
