@@ -122,6 +122,14 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
       }
     }
   }
+
+  if (config.compatibilityMode) {
+    const apiKey = getApiKey(headers);
+    if (apiKey !== null) {
+      setApiKey(apiKey, headers);
+    }
+  }
+
   searchParams.forEach((value, key) => {
     url.searchParams.append(key, value);
   });

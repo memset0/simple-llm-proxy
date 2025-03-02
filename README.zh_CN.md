@@ -34,3 +34,8 @@
 
 仅对 OpenAPI、Google、Anthropic 生效，多个 API Key 之间使用 `,` 分隔。
 
+#### `SLR_COMPATIBILITY_MODE`
+
+是否启用兼容模式，设置为 `true` 时启用，默认关闭。
+
+仅对 OpenAPI、Google、Anthropic 生效，当 API Key 以不正确的形式传递时（比如请求 Anthropic 模型时以 `Authorization` 的方式传递），启用兼容模式后会自动填写到正确的位置上。

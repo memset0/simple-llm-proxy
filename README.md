@@ -34,3 +34,8 @@ Whether to enable polling. Set to `true` to enable, disabled by default.
 
 Only effective for OpenAPI, Google, and Anthropic. Multiple API keys should be separated by `,`.
 
+#### `SLR_COMPATIBILITY_MODE`
+
+Whether to enable compatibility mode. Set to `true` to enable, disabled by default.
+
+Only effective for OpenAPI, Google, and Anthropic. When API keys are passed in an incorrect format (such as passing via `Authorization` when requesting Anthropic models), enabling compatibility mode will automatically fill in the correct location.
