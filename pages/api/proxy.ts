@@ -141,6 +141,9 @@ export default async function (request: NextRequest & { nextUrl?: URL }) {
   if (isNextChat) {
     const apiKey = getApiKey(headers);
     if (apiKey !== null) {
+      headers.delete('Authorization');
+      headers.delete('x-api-key');
+      headers.delete('x-goog-api-key');
       setApiKey(apiKey, headers, 'openai');
     }
   }
